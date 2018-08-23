@@ -1,3 +1,4 @@
+const User = require('./user/index.js');
 var userService = function() {
     var userServiceObject = this;
 
@@ -9,6 +10,14 @@ var userService = function() {
 
     function _addUser(user) {
         this.userList.push(user);
+    }
+
+    function _createUser(_name) {
+        var newUser = new User();
+        newUser.init(_name, this.count, function(err, res) {
+            if(err)
+        })
+        this.
     }
 
     function _count() {

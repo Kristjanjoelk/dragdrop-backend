@@ -1,0 +1,27 @@
+{
+  "name": "dragdrop-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kristjanjoelk/dragdrop-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kristjanjoelk/dragdrop-backend/issues"
+  },
+  "homepage": "https://github.com/Kristjanjoelk/dragdrop-backend#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "path": "^0.12.7",
+    "socket.io": "^2.1.1"
+  }
+}

@@ -1,0 +1,43 @@
+### SublimeText ###
+# SublimeText project files
+*.sublime-workspace
+
+### Webstorm ###
+/.idea/*
+
+### VSCode ###
+.vscode
+
+### Node ###
+lib-cov
+*.seed
+*.log
+*.csv
+*.out
+*.pid
+*.gz
+*.min.js
+*.min.css
+*.min.js.map
+*.min.css.map
+
+### Mac ###
+*.DS_Store
+
+pids
+results
+
+public_build
+public_build_rev
+
+rev-manifest.json
+
+npm-debug.log
+node_modules
+
+### Bower ###
+bower_components
+
+.tmp
+*.orig
+*~
