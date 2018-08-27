@@ -36,7 +36,7 @@ var User = function() {
         this.info.ID = _ID;
         logInfo.type = 1;
         logInfo.message = 'Initialized user, name: ' + _name + ', ID: ' + _ID;
-        return callback(null, logInfo)
+        return callback(null, logInfo);
     }
 
     function _setName(_name) {
