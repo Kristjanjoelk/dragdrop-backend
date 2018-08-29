@@ -1,5 +1,12 @@
 const User = require('../../game/user/index.js');
 const logService = require('../logservice/index.js');
+var logInfo = {
+    location: 'userService',
+    function: '',
+    error: '',
+    type: 0,
+    message: ''
+}
 var userService = function() {
     var userServiceObject = this;
 
@@ -10,16 +17,18 @@ var userService = function() {
     userServiceObject.addUser = _addUser;
     userServiceObject.createUser = _createUser;
     userServiceObject.getInfo = _getInfo;
+    userServiceObject.getUserById = _getUserById;
+    userServiceObject.getUserObjectById = _getUserObjectById;
 
     function _addUser(user) {
         this.userList.push(user);
     }
 
-    function _createUser(_name, socket) {
-        socket.emit('test', 'nice that works..');
+    function _createUser(_name, socketID) {
+        // socket.emit('test', 'nice that works..');
         var newUser = new User();
         var self = this;
-        return newUser.init(_name, self.count(), function(err, res) {
+        return newUser.init(_name, socketID, function(err, res) {
             logService.handleResult(err, res);
             if(err) {
                 return -1;
@@ -42,7 +51,59 @@ var userService = function() {
         }
     }
 
+    function _getUserById(socketID, callback) {
+        logInfo.type = 1;
+        logInfo.function = 'getUserById';
+
+
+        var userFound = null;
+
+        this.userList.map((user) => {
+            if(user.info.ID === socketID) {
+                userFound = user.info;
+            }
+        });
+
+        if(!userFound) {
+            logInfo.type = 3;
+            logInfo.error = 'User with id: ' + socketID + ' was not found in a list of ' + this.userList.length + ' users';
+            return callback(logInfo, null);
+        }
+
+        logInfo.payLoad = userFound;
+        logInfo.message = 'Found user ' + userFound.name + ' with ID: ' + userFound.ID; 
+        return callback(null, logInfo);
+    }
+
+    function _getUserObjectById(socketID, callback) {
+        logInfo.type = 1;
+        logInfo.function = 'getUserObjectById';
+
+
+        var userFound = null;
+
+        this.userList.map((user) => {
+            if(user.info.ID === socketID) {
+                userFound = user;
+            }
+        });
+
+        if(!userFound) {
+            logInfo.type = 3;
+            logInfo.error = 'User object with id: ' + socketID + ' was not found in a list of ' + this.userList.length + ' users';
+            return callback(logInfo, null);
+        }
+
+        logInfo.payLoad = userFound;
+        logInfo.message = 'Found user object' + userFound.info.name + ' with ID: ' + userFound.info.ID; 
+        return callback(null, logInfo);
+    }
+
+    function addCardsToUser(socketID) {
+        
+    }
+
     return userServiceObject;
 }
 
-module.exports = new userService;
+module.exports = new userService();

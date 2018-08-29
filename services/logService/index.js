@@ -5,6 +5,8 @@ var logService = function() {
     logServiceObject.handleResult = _handleResult;
     logServiceObject.handleError = _handleError;
     logServiceObject.handleResultMessage = _handleResultMessage;
+    logServiceObject.errorList = [];
+    logServiceObject.allList = [];
 
     function _handleResult(err, res) {
         if(err) {
@@ -15,21 +17,27 @@ var logService = function() {
     }
 
     function _handleError(err) {
+        err.time = getTimeStamp();
         console.log(
-            clc.green(getTimeStamp()),
+            clc.green(err.time),
             clc.red('Error happened in'),
-            clc.cyan(err.location),
+            clc.bgBlue(err.location),
             clc.red('running function'),
-            clc.cyan(err.function),
+            clc.yellow(err.function),
             clc.red('Error: ' + err.error)
         );
+
+        this.errorList.push(err);
     }
 
     function _handleResultMessage(res) {
+        res.time = getTimeStamp();
         console.log(
-            clc.green(getTimeStamp()),
+            clc.green(res.time),
+            clc.bgBlue(res.location),
             clc.cyanBright(res.message)
         );
+        this.allList.push(res);
     }
 
     function getTimeStamp() {
@@ -37,8 +45,16 @@ var logService = function() {
         var h = d.getHours();
         var m = d.getMinutes();
         var s = d.getSeconds();
+        if(m < 10) {
+            m = '0' + m;
+        }
+        if(s < 10) {
+            s = '0' + s;
+        }
         return h + ':' + m + ':' + s;
     }
+
+    return logServiceObject;
 }
 
 module.exports = new logService;

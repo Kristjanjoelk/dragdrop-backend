@@ -24,7 +24,13 @@ var User = function() {
     userObject.setCard = _setCard;
 
 
-
+    /**
+	 * Initialize new user
+	 *
+	 * @param {String} _name - Name of the user
+     * @param {number} _ID - The ID for the user, using length of current users online as new ID
+	 * @returns {~callback} - Error/success
+	 */
     function _init(_name, _ID, callback) {
         logInfo.function = '_init';
         if(!_name || typeof _ID === 'undefined') {
