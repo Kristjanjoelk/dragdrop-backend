@@ -45,15 +45,25 @@ socket.on('connect', function (data) {
                                                 console.log('error getting random cards');
                                             } else {
                                                 console.log('successfully got random cards', res);
+                                                setTimeout(function() {
+                                                    console.log('addCardToBoard!! ');
+                                                    socket.emit('addcardtoboard', 0, function (res) {
+                                                        if(!res) {
+                                                            console.log('error adding card to board');
+                                                        } else {
+                                                            console.log('successfully added card to bard', res);
+                                                        }
+                                                    });
+                                                }, 500);
                                             }
                                         });
-                                    }, 1000);
+                                    }, 500);
                                 }
                             });
-                        }, 1000);
+                        }, 500);
                     }
                 })
-            }, 1000);
+            }, 500);
         }
     });
 

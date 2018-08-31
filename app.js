@@ -15,8 +15,7 @@ const io = socketIO(server);
 
 
 const userService = require('./services/userservice/index.js');
-const cardService = require('./services/cardservice/index.js');
-const gameService = require('./services/gameservice/gameservice.js')(userService, cardService);
+const gameService = require('./services/gameservice/gameservice.js')(userService);
 
 // var game = require('./game/index.js')(userService);
 
@@ -56,6 +55,10 @@ io.on('connection', (socket) => {
 
   socket.on('getrandomcards', (cb) => { 
     return cb(gameService.getRandomCards(socket.id));
+  });
+
+  socket.on('addcardtoboard', (card, cb) => {
+    return cb(gameService.addCardToBoard(card, socket.id));
   });
 
   io.on('message', (data, cb) => {

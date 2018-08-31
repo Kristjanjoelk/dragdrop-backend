@@ -3,20 +3,20 @@ var logService = function() {
     var logServiceObject = this;
 
     logServiceObject.handleResult = _handleResult;
-    logServiceObject.handleError = _handleError;
-    logServiceObject.handleResultMessage = _handleResultMessage;
-    logServiceObject.errorList = [];
+    // logServiceObject.handleError = _handleError;
+    // logServiceObject.handleResultMessage = _handleResultMessage;
+   //  var errorList = [];
     logServiceObject.allList = [];
 
     function _handleResult(err, res) {
         if(err) {
-            this.handleError(err);
+            handleError(err);
         } else {
-            this.handleResultMessage(res);
+            handleResultMessage(res);
         }
     }
 
-    function _handleError(err) {
+    function handleError(err) {
         err.time = getTimeStamp();
         console.log(
             clc.green(err.time),
@@ -27,17 +27,18 @@ var logService = function() {
             clc.red('Error: ' + err.error)
         );
 
-        this.errorList.push(err);
+        // this.errorList.push(err);
     }
 
-    function _handleResultMessage(res) {
+    function handleResultMessage(res) {
         res.time = getTimeStamp();
         console.log(
             clc.green(res.time),
             clc.bgBlue(res.location),
+            clc.yellow(res.function),
             clc.cyanBright(res.message)
         );
-        this.allList.push(res);
+        // this.allList.push(res);
     }
 
     function getTimeStamp() {

@@ -70,7 +70,7 @@ var userService = function() {
             return callback(logInfo, null);
         }
 
-        logInfo.payLoad = userFound;
+        logInfo.payload = userFound;
         logInfo.message = 'Found user ' + userFound.name + ' with ID: ' + userFound.ID; 
         return callback(null, logInfo);
     }
@@ -94,8 +94,8 @@ var userService = function() {
             return callback(logInfo, null);
         }
 
-        logInfo.payLoad = userFound;
-        logInfo.message = 'Found user object' + userFound.info.name + ' with ID: ' + userFound.info.ID; 
+        logInfo.payload = userFound;
+        logInfo.message = 'Found user object ' + userFound.info.name + ' with ID: ' + userFound.info.ID; 
         return callback(null, logInfo);
     }
 
