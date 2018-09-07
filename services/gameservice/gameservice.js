@@ -17,6 +17,7 @@ var gameService = function(userService) {
     gameServiceObject.joinGame = _joinGame;
     gameServiceObject.findGameById = _findGameById;
     gameServiceObject.gameList = [];
+    gameServiceObject.getInfo = [];
 
 
     gameServiceObject.getRandomCards = _getRandomCards;
@@ -174,6 +175,19 @@ var gameService = function(userService) {
                 });
             });
         });        
+    }
+
+    function _getInfo() {
+        var self = this;
+
+        return userService.getInfo(function(res) {
+            return {   
+                gameList: self.gameList,
+                userList: res
+            }
+            
+
+        });
     }
 
     return gameServiceObject;

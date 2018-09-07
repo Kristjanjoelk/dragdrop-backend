@@ -43,12 +43,9 @@ var userService = function() {
     }
 
     function _getInfo() {
-        var userNameList = this.userList.map((user) => {
+        return this.userList.map((user) => {
             return user.info.name;
         });
-        return {
-            userList: userNameList
-        }
     }
 
     function _getUserById(socketID, callback) {

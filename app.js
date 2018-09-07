@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
       case 'setUserName':
         return cb(userService.createUser(data.data.option.name, socket.id));
       case 'getinfo':
-        return cb(userService.getInfo(data));
+        return cb(gameService.getInfo(data));
       case 'joingame':
         return cb(gameService.joinGame(socket.id, data));
       // case 'setUserName':
