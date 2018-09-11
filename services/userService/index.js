@@ -16,6 +16,7 @@ var userService = function() {
     userServiceObject.count = _count;
     userServiceObject.addUser = _addUser;
     userServiceObject.createUser = _createUser;
+    userServiceObject.removeUser = _removeUser;
     userServiceObject.getInfo = _getInfo;
     userServiceObject.getUserById = _getUserById;
     userServiceObject.getUserObjectById = _getUserObjectById;
@@ -42,10 +43,11 @@ var userService = function() {
         return this.userList.length;
     }
 
-    function _getInfo() {
-        return this.userList.map((user) => {
+    function _getInfo(callback) {
+        let result = this.userList.map((user) => {
             return user.info.name;
         });
+        return callback(result);
     }
 
     function _getUserById(socketID, callback) {
@@ -98,6 +100,19 @@ var userService = function() {
 
     function addCardsToUser(socketID) {
         
+    }
+
+    function _removeUser(socketID) {
+        let before = this.userList.length;
+        let newList = this.userList.filter((user) => {
+            return user.info.ID !== socketID;
+        });
+
+        this.userList = newList;
+        logInfo.type = 1;
+        logInfo.function = 'removeUser';
+        logInfo.message = 'User disconnected with ID: ' + socketID + ', removing user, we were ' + before + ' but are now ' + this.userList.length;
+        logService.handleResult(null, logInfo); 
     }
 
     return userServiceObject;

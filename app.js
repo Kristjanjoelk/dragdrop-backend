@@ -37,42 +37,36 @@ const gameService = require('./services/gameservice/gameservice.js')(userService
  // TODO: change from multiple listeners to 1 listener with multiple blablabla..
 io.on('connection', (socket) => {
   console.log('Client connected');
-  socket.on('disconnect', () => console.log('Client disconnected'));
+  socket.on('disconnect', () => {
+    userService.removeUser(socket.id);
+  });
   
   socket.on('setusername', (data, cb) => {
     return cb(userService.createUser(data, socket.id));
   });
 
   socket.on('messagefromapp', (data, cb) => {
+    console.log('received emit', data);
     switch (data.type) {
       case 'setUserName':
         return cb(userService.createUser(data.data.option.name, socket.id));
-      case 'getinfo':
+        break;
+      case 'getInfo':
         return cb(gameService.getInfo(data));
-      case 'joingame':
+        break;
+      case 'createGame':
+        return cb(gameService.createGame(socket.id));
+      case 'joinGame':
         return cb(gameService.joinGame(socket.id, data));
-      // case 'setUserName':
-      //   return cb(userService.createUser(data, socket.id));
-      // case 'setUserName':
-      //   return cb(userService.createUser(data, socket.id));
-      // case 'setUserName':
-      //   return cb(userService.createUser(data, socket.id));
+      case 'addCardToBoard':
+        return cb(gameService.addCardToBoard(data.payload, socket.id));
+      case 'getRandomCards':
+        return cb(gameService.getRandomCards(socket.id));
       default:
         return '404';
     };
   });
 
-  // socket.on('getinfo', (data, cb) => { 
-  //   return cb(userService.getInfo(data));
-  // });
-
-  // socket.on('creategame', (cb) => { 
-  //   return cb(gameService.createGame(socket.id));
-  // });
-
-  // socket.on('joingame', (data, cb) => { 
-  //   return cb(gameService.joinGame(socket.id, data));
-  // });
 
   // socket.on('getrandomcards', (cb) => { 
   //   return cb(gameService.getRandomCards(socket.id));

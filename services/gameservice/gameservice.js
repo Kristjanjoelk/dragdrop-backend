@@ -17,7 +17,7 @@ var gameService = function(userService) {
     gameServiceObject.joinGame = _joinGame;
     gameServiceObject.findGameById = _findGameById;
     gameServiceObject.gameList = [];
-    gameServiceObject.getInfo = [];
+    gameServiceObject.getInfo = _getInfo;
 
 
     gameServiceObject.getRandomCards = _getRandomCards;
@@ -178,15 +178,18 @@ var gameService = function(userService) {
     }
 
     function _getInfo() {
+        console.log('inside getInfo');
         var self = this;
-
+        logInfo.type = 1;
+        logInfo.function = 'getInfo';
         return userService.getInfo(function(res) {
+            console.log('returning from userservice getinfo');
+            logInfo.message = 'Getting info ' + res;
+            logService.handleResult(null, logInfo);
             return {   
                 gameList: self.gameList,
                 userList: res
             }
-            
-
         });
     }
 

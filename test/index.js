@@ -9,8 +9,15 @@ var response = function (data) {
 
 socket.on('connect', function (data) {
     console.log('Test client connected');
-    var data = 'JoelTest';
-    socket.emit('setusername', data, function (res) {
+    var data = {
+        data: {
+            option: {
+                name: 'JoelTest'
+            }
+        }
+    };
+    data.type = 'setUserName';
+    socket.emit('messagefromapp', data, function (res) {
         if (!res) {
             console.log('could not set username for some reason');
         } else {
@@ -18,7 +25,8 @@ socket.on('connect', function (data) {
         }
     });
 
-    socket.emit('getinfo', data, function (res) {
+    data.type = 'getInfo';
+    socket.emit('messagefromapp', data, function (res) {
         if (!res) {
             console.log('could not set username for some reason');
         } else {
@@ -26,28 +34,34 @@ socket.on('connect', function (data) {
 
             setTimeout(function() {
                 console.log('creating game.... ');
-                socket.emit('creategame', function (res) {
+                data.type = 'creategame';
+                socket.emit('messagefromapp', data, function (res) {
                     if(!res) {
                         console.log('error creating game');
                     } else {
                         console.log('successfully created game');
                         setTimeout(function() {
                             console.log('joining game.... ');
-                            socket.emit('joingame', 0, function (res) {
+                            data.type = 'joingame';
+                            data.payload = 0;
+                            socket.emit('messagefromapp', data, function (res) {
                                 if(!res) {
                                     console.log('error joining game');
                                 } else {
                                     console.log('successfully joined game');
                                     setTimeout(function() {
                                         console.log('get random cards... ');
-                                        socket.emit('getrandomcards', function (res) {
+                                        data.type = 'getrandomcards';
+                                        socket.emit('messagefromapp', data, function (res) {
                                             if(!res) {
                                                 console.log('error getting random cards');
                                             } else {
                                                 console.log('successfully got random cards', res);
                                                 setTimeout(function() {
                                                     console.log('addCardToBoard!! ');
-                                                    socket.emit('addcardtoboard', 0, function (res) {
+                                                    data.type = 'addcardtoboard';
+                                                    data.payload = 0;
+                                                    socket.emit('messagefromapp', data, function (res) {
                                                         if(!res) {
                                                             console.log('error adding card to board');
                                                         } else {
