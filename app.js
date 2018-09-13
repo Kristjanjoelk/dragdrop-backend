@@ -48,8 +48,11 @@ io.on('connection', (socket) => {
   socket.on('messagefromapp', (data, cb) => {
     console.log('received emit', data);
     switch (data.type) {
-      case 'setUserName':
+      case 'setUserName': {
+        userService.createUser('testUser', 1337);
+        gameService.test(1337);
         return cb(userService.createUser(data.data.option.name, socket.id));
+      }
         break;
       case 'getInfo':
         return cb(gameService.getInfo(data));
@@ -66,26 +69,6 @@ io.on('connection', (socket) => {
         return '404';
     };
   });
-
-
-  // socket.on('getrandomcards', (cb) => { 
-  //   return cb(gameService.getRandomCards(socket.id));
-  // });
-
-  // socket.on('addcardtoboard', (card, cb) => {
-  //   return cb(gameService.addCardToBoard(card, socket.id));
-  // });
-
-  // socket.on('permamovecard', (data, cb) => {
-
-  //   console.log('HEY NICE!!!', data)
-  //   // return cb(gameService.addCardToBoard(card, socket.id));
-  // });
-
-  // io.on('message', (data, cb) => {
-  //   console.log('Client emits setUserName', data);
-    
-  // });
 });
 
 

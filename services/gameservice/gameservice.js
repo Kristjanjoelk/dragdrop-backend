@@ -18,10 +18,32 @@ var gameService = function(userService) {
     gameServiceObject.findGameById = _findGameById;
     gameServiceObject.gameList = [];
     gameServiceObject.getInfo = _getInfo;
-
+    gameServiceObject.test = _test;
 
     gameServiceObject.getRandomCards = _getRandomCards;
     gameServiceObject.addCardToBoard = _addCardToBoard;
+
+    function _test(testUser) {
+        var newCardService = new CardService();
+        var newGame = new Game(newCardService);
+        var self = this;
+        var _owner = userService.getUserObjectById(testUser, function(err, res) {
+            logService.handleResult(err, res);
+            if(err) {
+                return -1;
+            }
+            return res.payload;
+        });
+        newGame.init(_owner, self.gameList.length, function(err, res) {
+            logService.handleResult(err, res);
+            if(err) {
+                return -1;
+            }
+            self.gameList.push(newGame);
+            return 1;
+        });
+        newGame.addUser(_owner);
+    }
 
     function _createGame(requesterID) {
 
