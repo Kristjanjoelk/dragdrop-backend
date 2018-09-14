@@ -16,10 +16,12 @@ var Game = function(cardService) {
     gameObject.ID = -1;
 
     gameObject.addUser = _addUser;
+    gameObject.removeUser = _removeUser;
     gameObject.getRandomCards = _getRandomCards;
     gameObject.getUserCount = _getUserCount;
 
     gameObject.addCardToBoard = _addCardToBoard;
+    gameObject.getCardsOnBoard = _getCardsOnBoard;
     
     function _init(_owner, _gameID, callback) {
         logInfo.function = 'init';
@@ -41,6 +43,14 @@ var Game = function(cardService) {
         user.joinGame(this.ID);
     }
 
+    function _removeUser(userID) {
+        let newList = this.userList.filter((user) => {
+            return user.info.ID !== userID;
+        });
+
+        this.userList = newList;
+    }
+
     function _getUserCount() {
         return this.userList.length;
     }
@@ -52,7 +62,12 @@ var Game = function(cardService) {
     function _addCardToBoard(cardID, callback) {
         return cardService.addCardToBoard(cardID, callback);
     }
- 
+    
+    function _getCardsOnBoard() {
+        let result = cardService.getCardsOnBoard();
+        console.log('returning from getCardsOnBoard', result);
+        return result;
+    }
 
     return gameObject;
 };

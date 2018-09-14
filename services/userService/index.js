@@ -102,16 +102,29 @@ var userService = function() {
         
     }
 
-    function _removeUser(socketID) {
+    function _removeUser(socketID, gameService) {
         let before = this.userList.length;
+        let userFound = null;
         let newList = this.userList.filter((user) => {
+            if(user.info.ID === socketID) {
+                userFound = user;
+            }
             return user.info.ID !== socketID;
         });
+        let extraMessage = '';
+        if(userFound && userFound.info.inGame) {
+            console.log(userFound);
+            let copy = Object.assign({}, userFound.info);
+            gameService.removeUserFromGame(copy.ID, copy.gameID);
 
+            userFound.info.inGame = false;
+            userFound.info.gameID = -1;
+            extraMessage = ' and from game with ID: ' + copy.gameID;
+        }
         this.userList = newList;
         logInfo.type = 1;
         logInfo.function = 'removeUser';
-        logInfo.message = 'User disconnected with ID: ' + socketID + ', removing user, we were ' + before + ' but are now ' + this.userList.length;
+        logInfo.message = 'User disconnected with ID: ' + socketID + ', removing user ' + extraMessage + ', we were ' + before + ' but are now ' + this.userList.length;
         logService.handleResult(null, logInfo); 
     }
 

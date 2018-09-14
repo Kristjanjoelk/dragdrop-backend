@@ -12,6 +12,7 @@ var cardService = function() {
 
     cardServiceObject.getRandomCard = _getRandomCard;
     cardServiceObject.addCardToBoard = _addCardToBoard;
+    cardServiceObject.getCardsOnBoard = _getCardsOnBoard;
     var cardsInPlay = -1;
     var cardsInPlayList = [];
     var cardsOnBoard = [];
@@ -68,6 +69,10 @@ var cardService = function() {
         cardsOnBoard.push(cardToAdd);
         logInfo.message = 'added card with ID: ' + cardID + ' to cards on board list, there are now ' + cardsOnBoard.length + ' on the board';
         return callback(null, logInfo);
+    }
+
+    function _getCardsOnBoard() {
+        return cardsOnBoard;
     }
 
     return cardServiceObject;

@@ -32,13 +32,14 @@ const gameService = require('./services/gameservice/gameservice.js')(userService
  *  a. initialize new game -> hold the game in a list
  * 
  */
+userService.createUser('testUser', 1337);
+gameService.test(1337);
 
 
- // TODO: change from multiple listeners to 1 listener with multiple blablabla..
 io.on('connection', (socket) => {
   console.log('Client connected');
   socket.on('disconnect', () => {
-    userService.removeUser(socket.id);
+    userService.removeUser(socket.id, gameService);
   });
   
   socket.on('setusername', (data, cb) => {
@@ -48,15 +49,10 @@ io.on('connection', (socket) => {
   socket.on('messagefromapp', (data, cb) => {
     console.log('received emit', data);
     switch (data.type) {
-      case 'setUserName': {
-        userService.createUser('testUser', 1337);
-        gameService.test(1337);
+      case 'setUserName':
         return cb(userService.createUser(data.data.option.name, socket.id));
-      }
-        break;
       case 'getInfo':
         return cb(gameService.getInfo(data));
-        break;
       case 'createGame':
         return cb(gameService.createGame(socket.id));
       case 'joinGame':

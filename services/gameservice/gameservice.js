@@ -22,6 +22,7 @@ var gameService = function(userService) {
 
     gameServiceObject.getRandomCards = _getRandomCards;
     gameServiceObject.addCardToBoard = _addCardToBoard;
+    gameServiceObject.removeUserFromGame = _removeUserFromGame;
 
     function _test(testUser) {
         var newCardService = new CardService();
@@ -42,7 +43,6 @@ var gameService = function(userService) {
             self.gameList.push(newGame);
             return 1;
         });
-        newGame.addUser(_owner);
     }
 
     function _createGame(requesterID) {
@@ -73,7 +73,7 @@ var gameService = function(userService) {
         });
     }
 
-    function _joinGame(requesterID, gameID) {
+    function _joinGame(requesterID, action) {
         logInfo.type = 1;
         logInfo.function = 'joinGame';
         var _joiner = userService.getUserObjectById(requesterID, function(err, res) {
@@ -84,33 +84,42 @@ var gameService = function(userService) {
             return res.payload;
         });
         if(!_joiner) {
+
+            console.log('joiner not found, returning');
             return -1;
         }
         var gameFound = false;
         this.gameList.map((game) => {
-            if(parseInt(game.ID) === parseInt(gameID)) {
+            if(parseInt(game.ID) === parseInt(action.gameNumber)) {
                 if(game.getUserCount() > 3) {
                     logInfo.type = 2;
-                    logInfo.error = 'User ' + _joiner.info.name + ' tried to join game with ID ' + gameID + ' but game is full';
+                    logInfo.error = 'User ' + _joiner.info.name + ' tried to join game with ID ' + action.gameNumber + ' but game is full';
                 } else {
                     game.addUser(_joiner);
-                    gameFound = true;
+                    gameFound = game;
                 }
             }
         });
 
         if(!gameFound) {
+
+            console.log('game not found, returning');
             if(logInfo.type !== 2) {
                 logInfo.type = 3;
-                logInfo.error = 'User ' + _joiner.info.name + ' tried to join game with ID ' + gameID + ' but game was not found in ' + this.gameList.length + ' games';
+                logInfo.error = 'User ' + _joiner.info.name + ' tried to join game with ID ' + action.gameNumber + ' but game was not found in ' + this.gameList.length + ' games';
             }
             logService.handleResult(logInfo, null);
             return -1;
         }
-        logInfo.message = 'User ' + _joiner.info.name + ' joined game with ID ' + gameID;
+
+        console.log('BINGO');
+        logInfo.message = 'User ' + _joiner.info.name + ' joined game with ID ' + action.gameNumber;
         logService.handleResult(null, logInfo);
 
-        return 1;
+        return {
+            userList: gameFound.userList,
+            cardsOnBoard: gameFound.getCardsOnBoard()
+        };
     }
 
     function _findGameById(_gameID, callback) {
@@ -213,6 +222,15 @@ var gameService = function(userService) {
                 userList: res
             }
         });
+    }
+
+    function _removeUserFromGame(userID, gameID) {
+
+        for(let i = 0; i < this.gameList.length; i++) {
+            if(this.gameList[i].ID === gameID) {
+                this.gameList[i].removeUser(userID);
+            }
+        }
     }
 
     return gameServiceObject;
