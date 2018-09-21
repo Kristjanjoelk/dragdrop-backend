@@ -1,4 +1,5 @@
-// const Card = require('./card/index.js');
+const Card = require('../../game/card/index.js');
+
 const mockData = require('./mockdata.js');
 var logInfo = {
     location: 'cardService',
@@ -9,13 +10,20 @@ var logInfo = {
 }
 var cardService = function() {
     var cardServiceObject = this;
+    var cardsInPlay = -1;
+    var cardsInPlayList = [];
+    var cardsOnBoard = [];
+
+    
 
     cardServiceObject.getRandomCard = _getRandomCard;
     cardServiceObject.addCardToBoard = _addCardToBoard;
     cardServiceObject.getCardsOnBoard = _getCardsOnBoard;
-    var cardsInPlay = -1;
-    var cardsInPlayList = [];
-    var cardsOnBoard = [];
+   
+
+    addFirstCardToBoard(0, function(err, res) {
+        console.log(err, res);
+    });
 
     function _getRandomCard(initial) {
         if(initial) {
@@ -71,7 +79,17 @@ var cardService = function() {
         return callback(null, logInfo);
     }
 
+    function addFirstCardToBoard(cardID, callback) {
+        logInfo.type = 1;
+        logInfo.function = '_addFirstCardToBoard';
+        cardsOnBoard.push(mockData.data[cardID]);
+        cardsInPlay[cardID] = true;
+        logInfo.message = 'added card with ID: ' + cardID + ' to cards on board list, there are now ' + cardsOnBoard.length + ' on the board';
+        return callback(null, logInfo);
+    }
+
     function _getCardsOnBoard() {
+        console.log('cardsonBoard::::', cardsOnBoard);
         return cardsOnBoard;
     }
 

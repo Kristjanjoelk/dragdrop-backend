@@ -5,19 +5,17 @@ var Card = function() {
     cardObject.info = {
         year: -1
     };
-    cardObject.init = _init;
-    cardObject.getYear = _getYear;
-
-    function _init(_year) {
-        this.info.year = _year;
-    }
-
-    function _getYear() {
-        return this.info.year;
-    }
 
     return cardObject;
 };
+
+Card.prototype._init = function(_year) {
+    this.info.year = _year;
+}
+
+Card.prototype._getYear = function() {
+    return this.info.year;
+}
 
 function c() {
     return new Card();

@@ -111,8 +111,6 @@ var gameService = function(userService) {
             logService.handleResult(logInfo, null);
             return -1;
         }
-
-        console.log('BINGO');
         logInfo.message = 'User ' + _joiner.info.name + ' joined game with ID ' + action.gameNumber;
         logService.handleResult(null, logInfo);
 
