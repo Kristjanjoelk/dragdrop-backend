@@ -16,6 +16,7 @@ var userService = function() {
     userServiceObject.count = _count;
     userServiceObject.addUser = _addUser;
     userServiceObject.createUser = _createUser;
+    userServiceObject.createTestUser = _createTestUser;
     userServiceObject.removeUser = _removeUser;
     userServiceObject.getInfo = _getInfo;
     userServiceObject.getUserById = _getUserById;
@@ -25,11 +26,27 @@ var userService = function() {
         this.userList.push(user);
     }
 
-    function _createUser(_name, socketID) {
+    function _createUser(_state, socketID) {
         // socket.emit('test', 'nice that works..');
         var newUser = new User();
         var self = this;
-        return newUser.init(_name, socketID, function(err, res) {
+        console.log('_state', _state);
+        return newUser.init(_state.payload, socketID, function(err, res) {
+            logService.handleResult(err, res);
+            if(err) {
+                return -1;
+            }
+            self.userList.push(newUser);
+            _state.auth.option.name = _state.payload;
+            return _state;
+        });
+    }
+
+    function _createTestUser(_username, socketID) {
+        // socket.emit('test', 'nice that works..');
+        var newUser = new User();
+        var self = this;
+        return newUser.init(_username, socketID, function(err, res) {
             logService.handleResult(err, res);
             if(err) {
                 return -1;

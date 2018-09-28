@@ -35,6 +35,9 @@ User.prototype.init = function(_name, _ID, callback) {
         logInfo.error = 'Name or ID are incorrect, name: ' + _name + ', ID: ' + _ID;
         return callback(logInfo, null);
     }
+    if(typeof _name === 'object') {
+        console.log('initializing user with object');
+    }
     this.info.name = _name;
     this.info.ID = _ID;
     logInfo.type = 1;

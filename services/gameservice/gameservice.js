@@ -84,7 +84,6 @@ var gameService = function(userService) {
             return res.payload;
         });
         if(!_joiner) {
-
             console.log('joiner not found, returning');
             return -1;
         }
@@ -116,7 +115,8 @@ var gameService = function(userService) {
 
         return {
             userList: gameFound.userList,
-            cardsOnBoard: gameFound.getCardsOnBoard()
+            cardsOnBoard: gameFound.getCardsOnBoard(),
+            cardsOnHand: this.getRandomCards(requesterID)
         };
     }
 

@@ -32,7 +32,7 @@ const gameService = require('./services/gameservice/gameservice.js')(userService
  *  a. initialize new game -> hold the game in a list
  * 
  */
-userService.createUser('testUser', 1337);
+userService.createTestUser('testUser', 1337);
 gameService.test(1337);
 
 
@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
     console.log('received emit', data);
     switch (data.type) {
       case 'setUserName':
-        return cb(userService.createUser(data.data.option.name, socket.id));
+        return cb(userService.createUser(data, socket.id));
       case 'getInfo':
         return cb(gameService.getInfo(data));
       case 'createGame':
@@ -61,6 +61,9 @@ io.on('connection', (socket) => {
         return cb(gameService.addCardToBoard(data.payload, socket.id));
       case 'getRandomCards':
         return cb(gameService.getRandomCards(socket.id));
+      case 'test':
+        console.log('INSIDE APP TEST')
+        return cb('nice!!! it worked');
       default:
         return '404';
     };
